@@ -1,0 +1,531 @@
+#include <iostream>
+#include <windows.h>
+#include <cmath>
+#include <ctime>
+#include <cstdlib>
+#include <iomanip>
+
+// Techniki programowania projekt 1, temat 6
+// Micha³ Kossakowski 197589
+// Kacper Komorowski 197963
+
+using namespace std;
+
+struct wezel
+{
+	int wartosc;
+	wezel*lewy;
+	wezel*prawy;
+};
+
+
+void powitanie ();
+void menu ();
+void logo ();
+void wskaz_wysokosc ();
+void wstaw_wierzcholki(wezel *&k, int x);
+int jeszcze_mniejsza (int mniejsza);
+int jeszcze_wieksza (int wieksza);
+void BST_reverse_preorder (wezel *r);
+void generuj_wierzcholki ();
+void galaz_pozioma();
+void wciecie();
+void rysuj_drzewo (int* wartosci, int index, int rozmiar, int do_usuniecia);
+
+int wysokosc_drzewa = 1;
+int *wsk_wysokosc_drzewa = &wysokosc_drzewa;
+
+
+int main (){
+	srand(time(NULL));
+
+	powitanie ();
+	menu ();
+
+return 0;
+}
+
+void powitanie()
+{
+	cout << "  __  __ _      _           _   _  __                   _                     _    _  " << endl;
+    cout << " |  \\/  (_) ___| |__   __ _| | | |/ /___  ___ ___  __ _| | _______      _____| | _(_) " << endl;
+    cout << " | |\\/| | |/ __| '_ \\ / _` | | | ' // _ \\/ __/ __|/ _` | |/ / _ \\ \\ /\\ / / __| |/ / | " << endl;
+    cout << " | |  | | | (__| | | | (_| | | | . \\ (_) \\__ \\__ \\ (_| |   < (_) \\ V  V /\\__ \\   <| | " << endl;
+    cout << " |_| _|_|_|\\___|_| |_|\\__,_|_| |_|\\_\\___/|___/___/\\__,_|_|\\_\\___/ \\_/\\_/ |___/_|\\_\\_| " << endl;
+    cout << " / |/ _ \\___  | ___| ( _ )/ _ \\                                                       " << endl;
+   	cout << " | | (_) | / /|___ \\ / _ \\ (_) |                                                      " << endl;
+    cout << " | |\\__, |/ /  ___) | (_) \\__, |                                                      " << endl;
+    cout << " |_|  /_//_/  |____/ \\___/  /_/                                                       " << endl;
+
+	 cout << endl;
+
+	cout << "  _  __                            _  __                                           _    _ " << endl;
+    cout << " | |/ /__ _  ___ _ __   ___ _ __  | |/ /___  _ __ ___   ___  _ __ _____      _____| | _(_)" << endl;
+    cout << " | ' // _` |/ __| '_ \\ / _ \\ '__| | ' // _ \\| '_ ` _ \\ / _ \\| '__/ _ \\ \\ /\\ / / __| |/ / |" << endl;
+    cout << " | . \\ (_| | (__| |_) |  __/ |    | . \\ (_) | | | | | | (_) | | | (_) \\ V  V /\\__ \\   <| |" << endl;
+    cout << " |_|\\_\\__,_|\\___| .__/ \\___|_|    |_|\\_\\___/|_| |_| |_|\\___/|_|  \\___/ \\_/\\_/ |___/_|\\_\\_|" << endl;
+    cout << "                |_|                                                                      " << endl;
+	cout << "  __  ___ ______ ___    __ ____  " << endl;
+    cout << " /_ |/ _ \\____  / _ \\  / /|___ \\ " << endl;
+    cout << "  | | (_) |  / / (_) |/ /_  __) |" << endl;
+    cout << "  | |\\__, | / / \\__, | '_ \\|__ < " << endl;
+    cout << "  | | / / / /     / /| (_) |__) |" << endl;
+    cout << "  |_|/_/ /_/     /_/  \\___/____/ " << endl;
+
+
+   	Sleep(4000);
+	system("cls");
+}
+
+void menu()
+{
+
+	while(true)
+	{
+
+		system("cls");
+
+		cout << "     	  	 	   _____ _____ _____ _____    _____ __    _____ _ _ _ _____ _____ " << endl;
+    	cout << "   			  |     |   __|   | |  |  |  |   __|  |  |     | | | |   | |   __|" << endl;
+    	cout << "   			  | | | |   __| | | |  |  |  |  |  |  |__|  |  | | | | | | |   __|" << endl;
+		cout << "   			  |_|_|_|_____|_|___|_____|  |_____|_____|_____|_____|_|___|_____|" << endl;
+
+		cout << endl;
+
+		cout << "			  _     ____                   _       _                            " << endl;
+    	cout << "			 / |   |  _ \\ _   _ ___ _   _ (_)   __| |_ __ _________      _____  " << endl;
+    	cout << "			 | |   | |_) | | | / __| | | || |  / _` | '__|_  / _ \\ \\ /\\ / / _ \\ " << endl;
+   	 	cout << "			 | |_  |  _ <\\ |_| \\__ \\ |_| || | | (_| | |   / /  __/\\ V  V / (_) |" << endl;
+    	cout << "			 |_(_) |_| \\_\\\\__, |___/\\__,_|/ |  \\__,_|_|  /___\\___| \\_/\\_/ \\___/ " << endl;
+    	cout << "			              |___/         |__/                                     " << endl;
+
+    	cout << endl;
+
+	 	cout << "   	 				  __    __      __     _    _    " << endl;
+    	cout << "  					 /  \\   \\ \\    / /  _ (_)__| |___" << endl;
+    	cout << " 					| () |   \\ \\/\\/ / || || / _` |_ /" << endl;
+    	cout << "  					 \\__(_)   \\_/\\_/ \\_, |/ \\__,_/__|" << endl;
+    	cout << "                  					 |__/__/         " << endl;
+
+		cout << endl;
+
+		cout << "Twoj wybor: ";
+		char a = cin.get();
+
+		cout << endl;
+
+		if (a == '1')
+		{
+			wskaz_wysokosc ();
+			generuj_wierzcholki ();
+		}
+		else if (a == '0')
+		{
+			system("PAUSE");
+			exit(0);
+		}
+		else if (a == '&')
+		{
+			logo ();
+		}
+
+	}
+}
+
+void logo ()
+{
+	system("cls");
+
+ 	cout << "                                                    ,&(                                                                                /&, " << endl;
+    cout << "                                                   ,&&&&&(.%(*.                                                                .*(# /&&&&&*   " << endl;
+    cout << "                                                (&&/*&(   ,%/ /&/         (%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         *&(.,%*   /&,*&&#. " << endl;
+    cout << "                                           ,#&%, .#&&(     /#%&,         (&,                                     &%          %&#(.    /&&#. ,#&%,   " << endl;
+    cout << "                                            */ ,%&#.,&#,  /%*          #&(%&, #&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&. &&(&#          ,%/  ,%&,.#&&* **    " << endl;
+    cout << "                                            /  (  *&&%.*%&&(%&%       (&/ (&, #&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&. %% *&#.     .&&&(&&&/ #&&/  *  (,    " << endl;
+    cout << "                                            ,&&*.#/  /&&(  .(&&%*(%&%/.   (&, #&&&&&(//(#&&&&&(/&&&&*(% ,&/*&&&&. &%   ./%&%(*#&&#,  /&&(  *# *&&,          " << endl;
+    cout << "                                    ,%&&&*   .#&%*%%*          /&(   .(&&&&, #&&&&&./&&* %&&&*,&&&&* .  . (&&&&. %&&&#.   #&/          *%%,%&#,   ,%&&%*    " << endl;
+    cout << "                                  (&#.  .%&,  . .%&%,          ,&(.%&%,..(&, #&&&&&....*%&&&&*,&&&&&&&&&&&&&&&&. %%  .%&&,(&.          ,%&%,    .%&,   (&(   " << endl;
+    cout << "                                   *&&&/ .&#   %&.             ,&&#   %&*,,  #&&&&&./&&&&&&&&*,&&&&&&% ,&&&&&&&. %&(,..,(%&&&&%%(  (&&/        &&&&/&(       " << endl;
+    cout << "                                        #&%*    %%        *&%.   ,,*(#%&*     #&&&&&&&&&&&&&&&*,&&&&%., .**&&&&&.   .&%/%&&(,   .%&*        (&,   *&&#.        " << endl;
+    cout << "                                       (&,  .(&%*        ,#&&&.          .#&, #&&&&&* . .%&&&&*,&&&&&&%((&&&&&&&. ..  /.        %&&%,        *%&#.  ,&(         " << endl;
+    cout << "                                       (&/%&&&*       *&&#. #%%&&&&&&&%%%/#&, #&&&&/.&&%%%&&&&*,&&&&&&%/(&&&&&&&. %&(,..,(%&&&&%%(  (&&/        &&&&/&(         " << endl;
+    cout << "                                        *#  (&*    (&&/ /&&&(             (&, #&&&&/.&&&,.&&&&*,&&&&%     ,&&&&&. %% .,,         /%&&(.*&&(     &%  (/           " << endl;
+    cout << "                                            (&,    #&.      ./%&#         (&, #&&&&&%(//#&&&&&*,&&&&&&% ,&&&&&&&. %%         %%    #&&% .&#   &&&&&&&(           " << endl;
+    cout << "                                       /&&&&&&&,  #&. &&&#   .&%         (&, #&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&. %%         %%    #&.  .&#         .&&*           " << endl;
+    cout << "                                     *&%          #&.  ,&(   .&%         (&,  .(%&&&&&&&&&&&&&&&&&&&&&&&&&&&(,   &%         %%    #&.  .&#         .&&*         " << endl;
+    cout << "                                     *&#   *&&&&&&&&. #&#    %&*          .(&&&%(.  .*#&&&&&&&&&&&&&&#*.  ./%&&&(,          ,&&.   /&# .@&&&&&&&*   #&*         " << endl;
+    cout << "                                        %&.  .%&,..    .&%.  .&%...              .*#&&%(*   ,/%%(,   *(%&&#*.              ...#&*   #&*    ...%&,   %&,          " << endl;
+    cout << "                                         %&,   ***&&.   .&&.   ***&%                    ,(%&&%/*%&&%(,                    (&(**   .&%     #&/**   ,&%            " << endl;
+    cout << "                                          (&(,,,,,*&&     (&(,,,,,/&%                                                   .&&*,,,,,*&%    .&&,,,,,,/&#              " << endl;
+    cout << "                                           ..........      ..........                                                    ..........      ..........               " << endl;
+    cout << "                                                                                                                                                                  " << endl;
+    cout << "                                                                                                                                                                  " << endl;
+    cout << "                              ,&&&&&&&*   ,&&&&&&&(   /&%       /&% ,&&&&&&&&&&/ #&&&&&&%   ,&&&&&&&, .&&*     &&(  (&&&.    (&#  /&%   &&*   /&&#     (&&&       " << endl;
+    cout << "                              ,&&,  .&&( #&&.    ,&&* /&%       /&%     .&&*     #&%       #&%     ,  .&&*     &&(  (&#&&*   (&#  /&%   &&* /&&(      *&%*&&.     " << endl;
+    cout << "                              ,&&,  ,&&( %&#      %&* /&%       /&%     .&&*     #&&####,  %&#        .&&(*****&&(  (&/ #&(  (&#  /&%   &&&&&(       .&&* (&#     " << endl;
+    cout << "                               ,&&%%%#/   %&%      %&* /&%       /&%     .&&*     #&%       %&#        .&&(,,,,*&&(  (&/  (&&.(&#  /&%   &&*.&&#     .&&#*,*&&(    " << endl;
+    cout << "                              ,&&,       (&&*    #&&, /&%       /&%     .&&*     #&%       (&&,    /, .&&*     &&(  (&/   *&&%&#  /&%   &&*  /&&(   #&#    .&&*       " << endl;
+    cout << "                              .%%,         *#%&&%(,   /%%%%%%#/ *%#     .%%,     (%%%%%%%*   *#%&%#/. .%%*     #%/  /%/     #%%(  *%#   #%,    #%%*/%%.     *%#       " << endl;
+    cout << "                                                                                                                                                                      " << endl;
+    cout << "                                                                                              .&#                                                                    " << endl;
+    cout << "                                                    *&&&%%&&&#  /&&&&&&&&/     #&&&/     %&&&,    #&/  *&&&%%&&&* .&&*  .&&&,     (&&&/                              " << endl;
+    cout << "                                                   .&&,         /&%    .&&*   /&# &&*    %&,#&(   #&/ .&&#        .&&*.%&&,      /&&,&&,                           " << endl;
+    cout << "                                                   .&&,  %%%%&, /&%     &&*  ,&&, *&%    %&, #&%  #&/   /%&&&&#,  .&&&&&(       *&&  *&&.                           " << endl;
+    cout << "                                                   .&&,    .&&, /&%     &&* ,&&&&&&&&&   %&,  *&& #&/         #&% .&&* #&&/     &&&&&&&&%                           " << endl;
+    cout << "                                                    #&&#/*/%&&, /&&(((%&&#  %&(     #&(  %&,    %&&&/ ,&&&#//#&&( .&&*  .&&&* .&&#     &&#                           " << endl;
+    cout << "                                                       ,**,.    .,,,,..    .,,       ,,  .,      ,,,.     ,,,,     ,,     .,,..,.       ,,                           " << endl;
+
+    Sleep(5560);
+}
+
+void wskaz_wysokosc ()
+{
+ 	system("cls");
+
+ 	cout << "podaj wysokosc drzewa: ";
+ 	int a;
+ 	cin >> *wsk_wysokosc_drzewa;
+
+
+ }
+
+void wstaw_wierzcholki(wezel *&k, int x)
+{
+	if (k == NULL)
+	{
+		wezel *nowy = new wezel;
+		nowy->wartosc = x;
+		nowy->prawy = NULL;
+		nowy->lewy = NULL;
+		k = nowy;
+
+	}
+	else if (x >= k->wartosc) wstaw_wierzcholki (k->prawy, x);
+	else wstaw_wierzcholki (k->lewy, x);
+}
+
+int jeszcze_mniejsza (int mniejsza)
+{
+	return mniejsza - (rand() % mniejsza / 4) - 1;
+}
+
+int jeszcze_wieksza (int wieksza)
+{
+	return wieksza + (rand () % wieksza / 2) + 1;
+}
+
+void BST_reverse_preorder(wezel *r, int* wartosci, int &index)
+{
+    if (r != NULL) {
+
+        //cout << r->wartosc << " ";
+        wartosci[index] = r->wartosc;
+        index ++;
+        BST_reverse_preorder(r->prawy,wartosci,index);
+        BST_reverse_preorder(r->lewy,wartosci,index);
+
+    }
+}
+
+
+ void generuj_wierzcholki ()
+{
+    int rozmiar = pow(2, *wsk_wysokosc_drzewa) - 1;
+	int liczba = rozmiar + rand() % 20;
+    int* wartosci= new int[rozmiar];
+    int index = 0;
+
+	wezel * korzen = NULL;
+	wstaw_wierzcholki (korzen, liczba);
+
+	int mniejsza = jeszcze_mniejsza (liczba);
+	int wieksza = jeszcze_wieksza (liczba);
+
+	for (int i = 0; i < (rozmiar - 1) / 2; i++)
+	{
+
+		wstaw_wierzcholki (korzen, mniejsza);
+		wstaw_wierzcholki (korzen, wieksza);
+
+		mniejsza = jeszcze_mniejsza (mniejsza);
+		wieksza = jeszcze_wieksza (wieksza);
+
+	}
+	BST_reverse_preorder(korzen, wartosci, index);
+
+	cout << endl;
+	cout << endl;
+
+	char znak;
+	int usun = -1;
+
+	while (znak != 'M')
+	{
+		rysuj_drzewo(wartosci, index, rozmiar, usun);
+		
+		cout << "'M' -> powrot do menu " << endl;
+		cout << "'U liczba' -> usun wierzcholek o danej wartosci" << endl;
+
+		cin >> znak;
+
+		if (znak == 'U')
+		{
+			cin >> usun;
+			rysuj_drzewo(wartosci, index, rozmiar, usun);
+		}
+
+		system("PAUSE");
+	}
+
+	delete [] wartosci;
+
+}
+void galaz_pozioma()
+{
+    cout << " ------- ";
+}
+void wciecie()
+{
+    cout << "          ";
+}
+
+void rysuj_drzewo (int *wartosci, int index, int rozmiar, int usuniety)
+{
+	system("cls");
+
+	cout << "BEEP BEEP BOOP BOOP" << endl;
+	Sleep(500);
+	cout << "Komputer mysli 1,5 sekundy" << endl;
+	Sleep(1000);
+	cout << endl;
+	cout << endl;
+
+
+	if (usuniety > 0)
+	{
+		cout << "usunales wierzcholek o wartosci: " << usuniety << endl;
+	}
+
+	cout << "lista wygenerowanych wierzcholkow odczytana w kolejnosci reverse preorder: ";
+
+   for ( int i = 0 ; i < index ; i++)
+   {
+   		if (wartosci[i] == usuniety) wartosci [i] = 0;
+        cout << wartosci[i] << ", ";
+   }
+
+   cout << endl;
+   cout << "Wysokosc Drzewa: " <<  *wsk_wysokosc_drzewa << endl;
+   cout << "liczba wierzcholkow drzewa: " << index;
+   cout << endl;
+   cout << endl;
+
+
+  while(true)
+  {
+   int j = 1;
+   cout << wartosci[0];
+   
+   if (*wsk_wysokosc_drzewa == 1)
+   {
+       cout << endl;
+       cout << endl;
+        break;
+   }
+   
+    for (; j < *wsk_wysokosc_drzewa; j++)
+	{
+            galaz_pozioma();
+			cout  << setw(2) << wartosci[j] ;
+    }
+
+    cout << endl;
+    cout << endl;
+
+    for (int i = 0 ; i < *wsk_wysokosc_drzewa - 1; i++)
+	{
+        cout << "|" ;
+		wciecie();
+    }
+    
+    cout << endl;
+    cout << endl;
+
+    for (int i = 0; i < *wsk_wysokosc_drzewa - 2; i++)
+	{
+        cout << "|" ;
+		wciecie();
+    }
+
+    cout<<"  " ;
+	galaz_pozioma();
+	cout  << setw(2) << wartosci[j];
+    
+	j++;
+    
+	cout << endl;
+    cout << endl;
+    
+	if(*wsk_wysokosc_drzewa == 2) break;
+
+    for (int i = 0 ; i < *wsk_wysokosc_drzewa - 2; i++)
+	{
+            cout << "|";
+			wciecie();
+    
+	}
+    cout << endl;
+	cout << endl;
+
+	for (int i = 0 ; i < *wsk_wysokosc_drzewa - 3; i++)
+	{
+            cout << "|" ;
+            wciecie();
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+            cout<< " " ;
+			galaz_pozioma();
+			cout << setw(2) << wartosci[j];
+            j++;
+    }
+
+	cout << endl;
+	cout << endl;
+
+    for (int i = 0; i < *wsk_wysokosc_drzewa - 3 ; i++)
+	{
+            cout << "|" ; wciecie() ;
+    }
+
+	wciecie();
+	cout << "|" ;
+	cout << endl;
+	cout << endl;
+
+    for (int i = 0 ; i < *wsk_wysokosc_drzewa - 3 ; i++)
+	{
+            cout << "|";
+			wciecie();
+    }
+    
+	cout << "  " ;
+    wciecie();
+    cout << " " ;
+    
+	galaz_pozioma();
+    
+	cout << setw(2) << wartosci[j] ;
+    j++;
+    
+	cout << endl;
+    cout << endl;
+    
+	for(int i = 0 ; i < *wsk_wysokosc_drzewa-3 ; i++)
+    {
+        cout << "| ";
+        wciecie();
+    }
+    
+	cout << endl;
+    cout << endl;
+    
+	if (*wsk_wysokosc_drzewa == 3) break;
+    
+	cout << "  ";
+    
+	for (int i = 0 ; i < *wsk_wysokosc_drzewa-1 ; i++)
+    {
+        galaz_pozioma();
+        cout << setw(2) << wartosci[j];
+        j++;
+    }
+    
+	cout << endl;
+    cout << endl;
+
+    cout << " ";
+    wciecie();
+    
+	for (int i = 0 ; i < *wsk_wysokosc_drzewa-2 ; i++)
+    {
+        cout << "|";
+        wciecie();
+    }
+    
+	cout << endl;
+    cout << endl;
+    cout << " ";
+    
+	wciecie();
+    cout << "| ";
+    
+	wciecie();
+    
+	cout << " ";
+    galaz_pozioma();
+    
+	cout << setw(2) << wartosci[j];
+    j++;
+    
+	cout << endl;
+    cout << endl;
+    
+	cout << " ";
+    wciecie();
+    cout << "|";
+    
+	for(int i=0 ; i < 2 ; i++)
+    {
+        wciecie();
+    }
+    
+	cout << endl;
+    cout << endl;
+    cout << " ";
+   
+    wciecie();
+    
+	cout << "  ";
+    
+	for (int i = 0 ; i < 2 ; i++)
+    {
+        galaz_pozioma();
+        cout << setw(2) << wartosci[j];
+        j++;
+    }
+    
+	cout << endl;
+    cout << endl;
+    
+	for (int i = 0 ; i < 2 ; i++)
+    {
+        cout << " ";
+        wciecie();
+    }
+    
+	cout << "|";
+    cout << endl;
+    cout << endl;
+    
+	for (int i = 0 ; i < 2 ; i++)
+    {
+        cout << " ";
+        wciecie();
+    }
+    
+	cout << " ";
+    
+	galaz_pozioma();
+   
+    cout << setw(2) << wartosci[j];
+    cout << endl;
+    
+	break;
+  
+  }
+}
+
+
+
